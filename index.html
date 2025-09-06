@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bandera Dominicana Interactiva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos para el cuerpo de la página */
+        body {
+            background-color: #e0f2fe; /* Un azul cielo muy claro */
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Contenedor principal de la bandera para centrarla y darle perspectiva */
+        .flag-container {
+            perspective: 1000px;
+        }
+
+        /* La bandera en sí, con sombra y animación */
+        .flag {
+            width: 90vw;
+            max-width: 600px;
+            height: 60vw;
+            max-height: 400px;
+            position: relative;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+            transform-style: preserve-3d;
+            animation: wave 10s infinite linear;
+        }
+
+        /* Definición de la animación de ondeado */
+        @keyframes wave {
+            0% { transform: rotateX(5deg) rotateY(-5deg) rotateZ(0deg); }
+            25% { transform: rotateX(5deg) rotateY(5deg) rotateZ(1deg); }
+            50% { transform: rotateX(0deg) rotateY(-5deg) rotateZ(0deg); }
+            75% { transform: rotateX(-5deg) rotateY(5deg) rotateZ(-1deg); }
+            100% { transform: rotateX(5deg) rotateY(-5deg) rotateZ(0deg); }
+        }
+
+        /* Estructura de la bandera usando CSS Grid */
+        .flag-grid {
+            display: grid;
+            grid-template-columns: 1fr 0.2fr 1fr; /* Columnas para los colores y la cruz */
+            grid-template-rows: 1fr 0.2fr 1fr;    /* Filas para los colores y la cruz */
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Colores de los cuadrantes */
+        .blue { background-color: #002D62; /* Azul ultramar */ }
+        .red { background-color: #CE1126; /* Rojo bermellón */ }
+        .white { background-color: #FFFFFF; }
+
+        /* Posicionamiento de los cuadrantes */
+        .top-left { grid-column: 1; grid-row: 1; }
+        .top-right { grid-column: 3; grid-row: 1; }
+        .bottom-left { grid-column: 1; grid-row: 3; }
+        .bottom-right { grid-column: 3; grid-row: 3; }
+
+        /* Cruz blanca */
+        .cross-v { grid-column: 2; grid-row: 1 / span 3; }
+        .cross-h { grid-column: 1 / span 3; grid-row: 2; }
+
+        /* Escudo Nacional */
+        .shield {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 35%; /* Tamaño relativo a la bandera */
+            cursor: pointer;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .shield:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+        }
+
+        /* Estilos para la ventana modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            color: #333;
+        }
+        
+        .modal-close:hover {
+            color: #CE1126;
+        }
+
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <header class="text-center mb-8">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Bandera de la República Dominicana</h1>
+        <p class="text-lg text-gray-600 mt-2">Haz clic en el escudo para conocer sus símbolos</p>
+    </header>
+
+    <!-- Contenedor de la Bandera -->
+    <div class="flag-container">
+        <div class="flag">
+            <div class="flag-grid">
+                <!-- Cuadrantes de la bandera -->
+                <div class="blue top-left"></div>
+                <div class="red top-right"></div>
+                <div class="red bottom-left"></div>
+                <div class="blue bottom-right"></div>
+                <!-- Cruz blanca -->
+                <div class="white cross-v"></div>
+                <div class="white cross-h"></div>
+            </div>
+            <!-- Escudo -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Coat_of_arms_of_the_Dominican_Republic.svg/1200px-Coat_of_arms_of_the_Dominican_Republic.svg.png" 
+                 alt="Escudo de la República Dominicana" 
+                 class="shield" 
+                 id="shield-img"
+                 onerror="this.onerror=null;this.src='https://placehold.co/200x200/FFFFFF/000000?text=Escudo';">
+        </div>
+    </div>
+
+    <!-- Ventana Modal con la información del escudo -->
+    <div id="modal" class="modal-overlay">
+        <div class="modal-content">
+            <span id="close-modal" class="modal-close">&times;</span>
+            <div class="flex flex-col md:flex-row gap-8 items-center">
+                <!-- Escudo agrandado -->
+                <div class="md:w-1/3 flex-shrink-0">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Coat_of_arms_of_the_Dominican_Republic.svg/1200px-Coat_of_arms_of_the_Dominican_Republic.svg.png" 
+                         alt="Escudo de la República Dominicana Agrandado" 
+                         class="w-full h-auto rounded-lg"
+                         onerror="this.onerror=null;this.src='https://placehold.co/400x400/FFFFFF/000000?text=Escudo';">
+                </div>
+                <!-- Información de los símbolos -->
+                <div class="md:w-2/3">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Símbolos del Escudo Nacional</h2>
+                    <ul class="space-y-3 text-left text-gray-700">
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-blue-800 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v11.494m-5.247-8.242l10.494 4.99m-10.494-4.99l10.494 4.99"></path></svg>
+                            <div><strong class="text-blue-800">La Biblia y la Cruz:</strong> Representan la fe cristiana y el lema "Y la verdad os hará libres", del Evangelio de San Juan 8:32, que está abierto en la Biblia.</div>
+                        </li>
+                        <li class="flex items-start">
+                             <svg class="w-6 h-6 text-green-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.293 2.293a1 1 0 010 1.414L10 17l-4 4-4-4 5.293-5.293a1 1 0 011.414 0L15 14m-3-3l4 4m0 0l-4-4m4 4v-4m0 4h-4"></path></svg>
+                            <div><strong class="text-green-600">Ramo de Laurel:</strong> Ubicado a la izquierda, es el símbolo de la inmortalidad y la gloria.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-800 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div><strong class="text-green-800">Rama de Palma:</strong> A la derecha del escudo, simboliza la libertad y el martirio.</div>
+                        </li>
+                        <li class="flex items-start">
+                             <svg class="w-6 h-6 text-blue-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5V4H4zm0 11v5h5v-5H4zm11-11v5h5V4h-5zm0 11v5h5v-5h-5z"></path></svg>
+                            <div><strong class="text-blue-600">Cinta Superior (Azul Ultramar):</strong> Contiene el lema nacional <span class="font-bold">"Dios, Patria, Libertad"</span>.</div>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-red-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5V4H4zm0 11v5h5v-5H4zm11-11v5h5V4h-5zm0 11v5h5v-5h-5z"></path></svg>
+                            <div><strong class="text-red-600">Cinta Inferior (Rojo Bermellón):</strong> Lleva el nombre del país, <span class="font-bold">"República Dominicana"</span>.</div>
+                        </li>
+                         <li class="flex items-start">
+                            <svg class="w-6 h-6 text-gray-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h6m-6 4h6m-6 4h6"></path></svg>
+                            <div><strong class="text-gray-700">Colores de la Bandera:</strong> El azul ultramar simboliza la libertad, el rojo bermellón la sangre derramada por los libertadores, y la cruz blanca, la salvación.</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Obtener los elementos del DOM
+        const shieldImg = document.getElementById('shield-img');
+        const modal = document.getElementById('modal');
+        const closeModal = document.getElementById('close-modal');
+
+        // Función para mostrar el modal
+        function openModal() {
+            modal.classList.add('active');
+        }
+
+        // Función para ocultar el modal
+        function hideModal() {
+            modal.classList.remove('active');
+        }
+
+        // Event Listeners
+        shieldImg.addEventListener('click', openModal); // Abrir al hacer clic en el escudo
+        closeModal.addEventListener('click', hideModal); // Cerrar con el botón 'x'
+
+        // Cerrar el modal si se hace clic fuera del contenido
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                hideModal();
+            }
+        });
+        
+        // Cerrar el modal con la tecla 'Escape'
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                hideModal();
+            }
+        });
+
+    </script>
+
+</body>
+</html>
