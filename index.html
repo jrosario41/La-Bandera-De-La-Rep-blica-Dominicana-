@@ -12,38 +12,6 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Contenedor para el conjunto de mástil y bandera */
-        .complete-flag-assembly {
-            display: flex;
-            align-items: center;
-        }
-
-        /* Estilos para el mástil */
-        .flagpole {
-            width: 20px;
-            height: 450px; /* Ligeramente más alto que la bandera */
-            background: linear-gradient(to right, #d3d3d3, #b0b0b0, #8d8d8d);
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            box-shadow: inset 2px 0 5px rgba(0,0,0,0.3);
-            position: relative;
-            margin-right: -1px; /* Superposición ligera para unir con la bandera */
-        }
-
-        /* Adorno en la punta del mástil */
-        .flagpole::before {
-            content: '';
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 30px;
-            background: radial-gradient(circle, #f0e68c, #ffd700);
-            border-radius: 50%;
-            box-shadow: 1px -1px 3px rgba(0,0,0,0.4);
-        }
-
         /* Contenedor principal de la bandera para centrarla y darle perspectiva */
         .flag-container {
             perspective: 1000px;
@@ -59,8 +27,6 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
             transform-style: preserve-3d;
             animation: wave 10s infinite linear;
-            border-top-right-radius: 5px;
-            border-bottom-right-radius: 5px;
         }
 
         /* Definición de la animación de ondeado */
@@ -177,31 +143,27 @@
         <p class="text-lg text-gray-600 mt-2">Haz clic en el escudo para conocer sus símbolos</p>
     </header>
 
-    <!-- Contenedor del Mástil y la Bandera -->
-    <div class="complete-flag-assembly">
-        <div class="flagpole"></div>
-        <div class="flag-container">
-            <div class="flag">
-                <div class="flag-grid">
-                    <!-- Cuadrantes de la bandera -->
-                    <div class="blue top-left"></div>
-                    <div class="red top-right"></div>
-                    <div class="red bottom-left"></div>
-                    <div class="blue bottom-right"></div>
-                    <!-- Cruz blanca -->
-                    <div class="white cross-v"></div>
-                    <div class="white cross-h"></div>
-                </div>
-                <!-- Escudo -->
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Coat_of_arms_of_the_Dominican_Republic.svg/1200px-Coat_of_arms_of_the_Dominican_Republic.svg.png" 
-                     alt="Escudo de la República Dominicana" 
-                     class="shield" 
-                     id="shield-img"
-                     onerror="this.onerror=null;this.src='https://placehold.co/200x200/FFFFFF/000000?text=Escudo';">
+    <!-- Contenedor de la Bandera -->
+    <div class="flag-container">
+        <div class="flag">
+            <div class="flag-grid">
+                <!-- Cuadrantes de la bandera -->
+                <div class="blue top-left"></div>
+                <div class="red top-right"></div>
+                <div class="red bottom-left"></div>
+                <div class="blue bottom-right"></div>
+                <!-- Cruz blanca -->
+                <div class="white cross-v"></div>
+                <div class="white cross-h"></div>
             </div>
+            <!-- Escudo -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Coat_of_arms_of_the_Dominican_Republic.svg/1200px-Coat_of_arms_of_the_Dominican_Republic.svg.png" 
+                 alt="Escudo de la República Dominicana" 
+                 class="shield" 
+                 id="shield-img"
+                 onerror="this.onerror=null;this.src='https://placehold.co/200x200/FFFFFF/000000?text=Escudo';">
         </div>
     </div>
-
 
     <!-- Ventana Modal con la información del escudo -->
     <div id="modal" class="modal-overlay">
@@ -287,4 +249,3 @@
 
 </body>
 </html>
-
